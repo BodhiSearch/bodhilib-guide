@@ -1,28 +1,22 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+from pathlib import Path
+import toml
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+PROJ_DIR = Path(__file__).parent.absolute()
+with open(PROJ_DIR / "pyproject.toml") as f:
+    pyproj_file = toml.load(f)
 
-project = 'bodhilib-guide'
-copyright = '2023, Amir Nagri'
-author = 'Amir Nagri'
-release = '0.1.0'
+project = "bodhilib-guide"
+copyright = "2023, Amir Nagri"
+author = "Amir Nagri"
+release = pyproj_file["tool"]["poetry"]["version"]
 
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+extensions = [
+    "nbsphinx",
+    "sphinx_copybutton",
+]
 
-extensions = ['nbsphinx']
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = 'alabaster'
-html_static_path = ['_static']
+html_theme = "sphinx_book_theme"
+html_static_path = ["_static"]
