@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: update-docs-requirements-txt
+        name: update-docs-requirements-txt
+        description: 'Generate docs/requirements.txt based on poetry.lock'
+        entry: poetry
+        args: [export, --without-hashes, --format, requirements.txt, --output, requirements.txt]
+        language: system
+        pass_filenames: false

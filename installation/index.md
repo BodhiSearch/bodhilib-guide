@@ -39,8 +39,8 @@ If you are exploring, and need not be bothered by installing packages as you nee
 pip install bodhiext.all
 ```
 
-```{admonition} Note
-:class: important
+```{admonition} Caution
+:class: warning
 
 `bodhiext.all` installs all the plugin packages developed by bodhilib team. These packages and its dependencies might use a lot of your bandwidth and disk space.
 ```
@@ -67,7 +67,7 @@ import bodhilib
 
 You can verify the plugin package is properly installed by trying to import it. For e.g. if you have installed `bodhiext.openai`, you can verify the installation by running the following in your python environment:
 
-```shell
+```python
 import bodhiext.openai
 ```
 

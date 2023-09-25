@@ -1,0 +1,901 @@
+bodhilib
+bodhilib.PathLike
+Type alias for Union of str and pathlib.Path
+
+bodhilib.TextLike
+Type alias for Union of str and protocol SupportsText
+
+bodhilib.TextLikeOrTextLikeList
+Type alias for Union of TextLike and List[TextLike]
+
+bodhilib.SerializedInput
+Type alias for a generic and flexible input types that can be passed to the Service components like LLM, Splitter, Embedder as input.
+
+Defined as TextLike | List[TextLike] | Dict[str, Any] | List[Dict[str, Any]].
+
+Service supporting SerializedInput can take in::
+a string, the string value is treated as “text” for target object, remaining values are set as defaults
+
+a list of strings, created iteratively same as above
+
+an object supporting SupportsText, the property text is treated as “text” for the target object, remaining values are set as defaults
+
+a list of objects supporting SupportsText, created iteratively same as above
+
+a serialized object as dict, e.g. for Prompt can be {“text”: “hello”, “role”: “user”, “source”: “input”}. The input is passed to the constructor and built using BaseModel implementation.
+
+a list of serialized objects as dict, created iteratively same as above
+
+bodhilib.Embedding
+Type alias for List[float], to indicate the embedding generated from Embedder operation.
+
+bodhilib module defines classes and methods for bodhilib components.
+
+classbodhilib.BaseEmbedder
+Bases: Embedder
+
+BaseEmbedder provides a simpler method for implementing Embedders.
+
+BaseEmbedder overrides the abstract Embedder method embed(), massages the data and converts the input to a list of Node, and passes to the abstract method to implement _embed().
+
+abstract_embed(nodes: List[Node])→ List[Node]
+Embed a list of Node using the embedder service.
+
+Parameters
+:
+nodes (List[Node]) – list of Node to embed
+
+Returns
+:
+list of Node enriched with Embedding
+
+Return type
+:
+List[Node]
+
+embed(inputs: SerializedInput)→ List[Node]
+Embed a SerializedInput using the embedder service.
+
+Massages the data and converts the input to a list of Node. Then passes to the _embed() for processing.
+
+Parameters
+:
+inputs (SerializedInput) – takes input as SerializedInput, a generic type that can be a TextLike, a list of TextLike, or a serialized dict of the object.
+
+Returns
+:
+list of Node enriched with Embedding
+
+Return type
+:
+List[Node]
+
+classbodhilib.BasePromptSource
+Bases: PromptSource
+
+BasePromptSource provides a simpler method for implementing PromptSources.
+
+Class implementing PromptSource should extend this base class. In case the abstract method changes in PromptSource, this BaseClass tries to safely adapt new changes to old interface.
+
+find(tags: str | List[str])→ List[PromptTemplate]
+Find a prompt template for given tags.
+
+Parameters
+:
+tags (str | List[str]) – list of tags to search for
+
+Returns
+:
+list of prompt templates matching the tags
+
+Return type
+:
+List[PromptTemplate]
+
+list_all()→ List[PromptTemplate]
+List all prompt templates in the source.
+
+Returns
+:
+list of all prompt templates in the source
+
+Return type
+:
+List[PromptTemplate]
+
+classbodhilib.BaseSplitter
+Bases: Splitter
+
+BaseSplitter provides a simpler method for implementing Splitters.
+
+BaseSplitter overrides the abstract Splitter method split(), massages the data and converts it to a list of Document and passes to implementing _split() method.
+
+abstract_split(docs: Iterable[Document])→ List[Node]
+Split a list of Document into list of Node.
+
+The split method preserves the relationship and copies the metadata associated with Document to the Node.
+
+split(inputs: SerializedInput)→ List[Node]
+Split a SerializedInput into a list of Node.
+
+Parameters
+:
+inputs (SerializedInput) – takes input as SerializedInput, a generic type that can be a TextLike, a list of TextLike, or a serialized dict of the object.
+
+Returns
+:
+a list of Node as result of the split
+
+Return type
+:
+List[Node]
+
+classbodhilib.DataLoader(*args, **kwds)
+Bases: Iterable[Document], ABC
+
+Abstract base class for data loaders.
+
+A data loader should inherit from this class and implement the abstract methods.
+
+abstract__iter__()→ Iterator[Document]
+Returns the document iterator.
+
+It is for the sub-class to ensure the __iter__ method returns a new instance of iterator
+
+abstractadd_resource(**kwargs: Dict[str, Any])→ None
+Add a resource to the data loader.
+
+load()→ List[Document]
+Returns the document as list.
+
+classbodhilib.Distance(value)
+Bases: _StrEnumMixin, str, Enum
+
+Vector Distance Method.
+
+COSINE= 'cosine'
+DOT_PRODUCT= 'dot_product'
+EUCLIDEAN= 'euclidean'
+classbodhilib.Document(*, text: str, metadata: Dict[str, Any] = None)
+Bases: BaseModel
+
+Document defines the basic interface for a processible resource.
+
+Primarily contains text (content) and metadata.
+
+Create a new model by parsing and validating input data from keyword arguments.
+
+Raises ValidationError if the input data cannot be parsed to form a valid model.
+
+metadata: Dict[str, Any]
+Metadata associated with the document. e.g. filename, dirname, url etc.
+
+text: str
+Text content of the document.
+
+classbodhilib.Embedder
+Bases: ABC
+
+Abstract base class for embedders.
+
+An embedder should inherit from this class and implement the abstract methods.
+
+abstract propertydimension: int
+Dimension of the embeddings.
+
+abstractembed(inputs: SerializedInput)→ List[Node]
+Embed a SerializedInput using the embedder service.
+
+Parameters
+:
+inputs (SerializedInput) – takes input as SerializedInput, a generic type that can be a TextLike, a list of TextLike, or a serialized dict of the object.
+
+Returns
+:
+list of Node enriched with Embedding
+
+Return type
+:
+List[Node]
+
+classbodhilib.LLM
+Bases: ABC
+
+Abstract Base Class LLM defines the common interface implemented by all LLM implementations.
+
+abstractgenerate(prompt_input: SerializedInput, *, stream: bool | None = None, temperature: float | None = None, top_p: float | None = None, top_k: int | None = None, n: int | None = None, stop: List[str] | None = None, max_tokens: int | None = None, presence_penalty: float | None = None, frequency_penalty: float | None = None, user: str | None = None, **kwargs: Dict[str, Any])→ Prompt | PromptStream
+Base class generate() method interface common to all LLM service implementation.
+
+Takes in bodhilib.SerializedInput, a flexible input supporting from plain string, or a Prompt object, or a dict representation of Prompt. Returns the response from LLM service as Prompt object with source=”output”.
+
+Parameters
+:
+prompts (bodhilib.SerializedInput) – input to the LLM service
+
+stream (bool) – whether to stream the response from the LLM service
+
+temperature (Optional[float]) – temperature or randomness of the generation
+
+top_p (Optional[float]) – token consideration probability top_p for the generation
+
+top_k (Optional[int]) – token consideration number top_k for the generation
+
+n (Optional[int]) – number of responses to generate
+
+stop (Optional[List[str]]) – list of stop tokens to stop the generation
+
+max_tokens (Optional[int]) – maximum number of tokens to generate
+
+presence_penalty (Optional[float]) – presence penalty for the generation, between -2 and 2
+
+frequency_penalty (Optional[float]) – frequency penalty for the generation, between -2 and 2
+
+user (Optional[str]) – user making the request, for monitoring purpose
+
+kwargs (Dict[str, Any]) – pass through arguments for the LLM service
+
+Returns
+:
+a Prompt object, if stream is False Iterator[Prompt]: an iterator of Prompt objects, if stream is True
+
+Return type
+:
+Prompt
+
+classbodhilib.Node(*, id: str | None = None, text: str, parent: Document | None = None, metadata: Dict[str, Any] = None, embedding: List[float] | None = None)
+Bases: BaseModel
+
+Node defines the basic data structure for a processible resource.
+
+It contains a unique identifier, content text, metadata associated with its sources, and embeddings.
+
+Create a new model by parsing and validating input data from keyword arguments.
+
+Raises ValidationError if the input data cannot be parsed to form a valid model.
+
+embedding: Embedding | None
+id: str | None
+Unique identifier for the node.
+
+Generated during the document split operation, or retrieved from doc/vector database at the time of query.
+
+metadata: Dict[str, Any]
+Metadata associated with the node. This is also copied over from parent when splitting Document.
+
+parent: Document | None
+Metadata associated with the document. e.g. filename, dirname, url etc.
+
+text: str
+Text content of the document.
+
+classbodhilib.PluginManager
+Bases: object
+
+Searches for and loads bodhilib plugins.
+
+Initialize plugin manager and load the bodhilib plugins.
+
+get(service_name: str, service_type: str, *, oftype: Type[C] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Any)→ C
+Get an instance of service for the given service and type.
+
+Parameters
+:
+service_name (str) – name of the service, e.g. “openai”, “cohere”, “anthropic”
+
+service_type (str) – type of the service, e.g. “llm”, “embedder”, “data_loader”
+
+oftype (Optional[Type[T]]) – if the type of service is known, pass the type in argument oftype, the service is cast to oftype and returned for better IDE support.
+
+publisher (Optional[str]) – publisher or developer of the service plugin, e.g. “bodhilib”,”<github-username>”
+
+version (Optional[str]) – version of the service
+
+**kwargs (Dict[str, Any]) – pass through arguments for the service, e.g. “temperature”, “max_tokens”, etc.
+
+Returns
+:
+an instance of service of type oftype, if oftype is passed, else of type Any
+
+Return type
+:
+C (C | Any)
+
+Raises
+:
+TypeError – if the type of service is not oftype
+
+classmethodinstance()→ PluginManager
+Singleton method to return instance of PluginManager.
+
+list_services(service_type: str)→ List[Service]
+List all services of type service_type installed and available.
+
+classbodhilib.Prompt(text: str, role: Role | str | None = Role.USER, source: Source | str | None = Source.INPUT)
+Bases: BaseModel
+
+Prompt encapsulating input/output schema to interact with LLM service.
+
+Initialize a prompt.
+
+Parameters
+:
+text (str) – text of the prompt
+
+role (Role) –
+
+role of the prompt.
+
+Role can be given as one of the allowed string value [“system”, “ai”, “user”] or as a Role enum [Role.SYSTEM, Role.AI, Role.USER].
+
+The string is converted to Role enum. If the string value is not one of the allowed values, then a ValueError is raised.
+
+source (Source) –
+
+source of the prompt.
+
+Source can be given as a one of the allowed string value [“input”, “output”] or as a Source enum [Source.INPUT, Source.OUTPUT].
+
+The string is converted to Source enum. If the string value is not one of the allowed values, then a ValueError is raised.
+
+Raises
+:
+ValueError – If the role or source is not one of the allowed values.
+
+isstream()→ bool
+To check if this is a prompt stream.
+
+Returns
+:
+False as this is not a prompt stream.
+
+Return type
+:
+bool
+
+role: Role
+The role of the prompt.
+
+Defaults to Role.USER.
+
+source: Source
+The source of the prompt.
+
+Defaults to Source.INPUT.
+
+text: str
+The text or content or input component of the prompt.
+
+classmethodvalidate_role(value: Any)→ Role
+classmethodvalidate_source(value: Any)→ Source
+classbodhilib.PromptSource
+Bases: ABC
+
+Abstract base class for prompt sources.
+
+A prompt source provides a browsable/searchable interface for prompt templates.
+
+abstractfind(tags: str | List[str])→ List[PromptTemplate]
+Find a prompt template for given tags.
+
+Parameters
+:
+tags (str | List[str]) – list of tags to search for
+
+Returns
+:
+list of prompt templates matching the tags
+
+Return type
+:
+List[PromptTemplate]
+
+abstractlist_all()→ List[PromptTemplate]
+List all prompt templates in the source.
+
+Returns
+:
+list of all prompt templates in the source
+
+Return type
+:
+List[PromptTemplate]
+
+classbodhilib.PromptStream(api_response: Iterable[T], transformer: Callable[[T], Prompt])
+Bases: Iterator[Prompt]
+
+Iterator over a stream of prompts.
+
+Used by LLMs to wrap the stream response to an iterable over prompts.
+
+Initialize a prompt stream.
+
+Parameters
+:
+api_response (Iterable[T]) – LLM API Response of generic type T as Iterable
+
+transformer (Callable[[T], Prompt]) – Transformer function to convert API response to Prompt
+
+__iter__()→ Iterator[Prompt]
+Returns the iterator object itself.
+
+isstream()→ bool
+To check if this is a prompt stream.
+
+Returns
+:
+False as this is not a prompt stream.
+
+Return type
+:
+bool
+
+propertytext: str
+Returns the text accumulated over the stream of responses.
+
+classbodhilib.PromptTemplate(template: str, role: Role | None = None, source: Source | None = None, format: TemplateFormat | None = 'fstring', tags: str | None = None, *, extras: Dict[str, Any] = None)
+Bases: BaseModel
+
+PromptTemplate used for generating prompts using a template.
+
+Initializes a prompt template.
+
+Parameters
+:
+template – template string
+
+role – role of the prompt.
+
+source – source of the prompt.
+
+format – format to use for rendering the template.
+
+tags – the searchable tags for the template
+
+**kwargs – additional arguments to be used for rendering the template
+
+extras: Dict[str, Any]
+The context variables to be used for rendering the template.
+
+format: TemplateFormat
+Template format to use for rendering.
+
+role: Role
+Role of the prompt.
+
+source: Source
+Source of the prompt.
+
+tags: List[str]
+Searchable tags associated with the template.
+
+template: str
+Template for generating prompts.
+
+to_prompts(**kwargs: Dict[str, Any])→ List[Prompt]
+Converts the PromptTemplate into a Prompt.
+
+Parameters
+:
+kwargs – all variables to be used for rendering the template
+
+Returns
+:
+prompt generated from the template
+
+Return type
+:
+Prompt
+
+classbodhilib.Role(value)
+Bases: _StrEnumMixin, str, Enum
+
+Role of the prompt.
+
+Used for fine-grain control over “role” instructions to the LLM service. Can be one of - ‘system’, ‘ai’, or ‘user’.
+
+AI= 'ai'
+SYSTEM= 'system'
+USER= 'user'
+classbodhilib.Service(service_name: str, service_type: str, publisher: str, service_builder: Callable, version: str = '')
+Bases: tuple
+
+Encapsulates basic info of service provided by the plugin.
+
+Create new instance of Service(service_name, service_type, publisher, service_builder, version)
+
+publisher: str
+Publisher identifier of the plugin. E.g. bodhilib, openai, <github-user> etc.
+
+service_builder: Callable
+Callable which returns an instance of service.
+
+Callable takes in **kwargs: Dict[str, Any] and returns an instance of service.
+
+service_name: str
+Name of the service provided by the plugin. E.g. openai, cohere, anthropic, etc.
+
+service_type: str
+Type of service provided by the plugin. E.g. llm, embed etc.
+
+version: str
+Version of the plugin
+
+classbodhilib.Source(value)
+Bases: _StrEnumMixin, str, Enum
+
+Source of the prompt.
+
+If the prompt is given as input by the user, then source=”input”, or if the prompt is generated as response by the LLM service, then source=”output”.
+
+INPUT= 'input'
+OUTPUT= 'output'
+classbodhilib.Splitter
+Bases: ABC
+
+Splitter defines abstract method to split longer text into shorter text.
+
+Splitter takes in longer text as a generic TextLike and splits them into shorter text and return as Node. The shorter text are then used to create embeddings.
+
+abstractsplit(inputs: SerializedInput)→ List[Node]
+Split a SerializedInput into a list of Node.
+
+Parameters
+:
+inputs (SerializedInput) – takes input as SerializedInput, a generic type that can be a TextLike, a list of TextLike, or a serialized dict of the object.
+
+Returns
+:
+a list of Node as result of the split
+
+Return type
+:
+List[Node]
+
+classbodhilib.SupportsText(*args, **kwargs)
+Bases: Protocol
+
+TextLike is a protocol for types that can be converted to text.
+
+To support the protocol, the type must have a property text.
+
+Known sub-classes: Prompt, Document, Node
+
+propertytext: str
+Return the content of the object as string.
+
+classbodhilib.VectorDB
+Bases: ABC
+
+VectorDB defines the interface for a vector database client.
+
+abstractclose()→ bool
+Closes the connection with the vector db.
+
+Returns
+:
+True if the connection with vector db is closed successfully.
+
+Raises
+:
+VectorDBError – Wraps any connection error raised by the underlying database and raises.
+
+abstractconnect()→ bool
+Establishes a connection with the vector db.
+
+Returns
+:
+True if the connection with vector db is successful.
+
+Raises
+:
+VectorDBError – Wraps any connection error raised by the underlying database and raises.
+
+abstractcreate_collection(collection_name: str, dimension: int, distance: str | Distance, **kwargs: Dict[str, Any])→ bool
+Create a collection in vector database.
+
+Returns
+:
+True if the database is created successfully.
+
+Raises
+:
+VectorDBError – Wraps any database create error raised by the underlying database.
+
+abstractdelete_collection(collection_name: str, **kwargs: Dict[str, Any])→ bool
+Deletes a collection in vector database.
+
+Returns
+:
+True if the database is deleted successfully.
+
+Raises
+:
+VectorDBError – Wraps any database delete error raised by the underlying client.
+
+abstractget_collections()→ List[str]
+List all the vector databases.
+
+Returns
+:
+List of vector database names.
+
+Raises
+:
+VectorDBError – Wraps any database list error raised by the underlying database.
+
+abstractping()→ bool
+Check the connection to the vector db.
+
+Returns
+:
+True if the database is up and running.
+
+Raises
+:
+VectorDBError – Wraps any connection error raised by the underlying database and raises.
+
+abstractquery(collection_name: str, embedding: Embedding, filter: Dict[str, Any] | None, **kwargs: Dict[str, Any])→ List[Node]
+Search for the nearest vectors in the database.
+
+Returns
+:
+List of nodes with metadata.
+
+Raises
+:
+VectorDBError – Wraps any database delete error raised by the underlying client.
+
+abstractupsert(collection_name: str, nodes: List[Node])→ List[Node]
+Insert or update a node into the database along with metadata.
+
+This updates the nodes with record ids and other DB information, similar to using an ORM.
+
+Returns
+:
+List of record ids for the inserted embeddings.
+
+Raises
+:
+VectorDBError – Wraps any database delete error raised by the underlying client.
+
+exceptionbodhilib.VectorDBError
+Bases: Exception
+
+Error to wrap any exception raised by the vector database client.
+
+bodhilib.get_data_loader(service_name: str, *, oftype: Type[DL] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ DL
+Get an instance of data loader for given arguments.
+
+Given the service name, publisher (optional) and version(optional), return the registered data loader oftype (optional).
+
+Parameters
+:
+service_name (str) – name of the service, e.g. “file”, “notion”, “s3”
+
+oftype (Optional[Type[T]]) – if the type of data loader is known, pass the type in argument oftype, the data loader is cast to oftype and returned for better IDE support.
+
+publisher (Optional[str]) – publisher or developer of the data loader plugin, e.g. “bodhilib”,”<github-username>”
+
+version (Optional[str]) – version of the data loader
+
+**kwargs (Dict[str, Any]) – pass through arguments for the data loader, e.g. aws_access_key_id, notion_db etc.
+
+Returns
+:
+an instance of DataLoader service
+of type oftype, if oftype is passed, else of type DataLoader
+
+Return type
+:
+DL (DL | DataLoader)
+
+Raises
+:
+TypeError – if the type of data loader is not oftype
+
+bodhilib.get_embedder(service_name: str, *, oftype: Type[E] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ E
+Get an instance of embedder given the service name, publisher (optional) and version(optional).
+
+Parameters
+:
+service_name (str) – name of the service, e.g. “sentence-transformers” etc.
+
+oftype (Optional[Type[T]]) – if the type of embedder is known, pass the type in argument oftype, the embedder is cast to oftype and returned for better IDE support.
+
+publisher (Optional[str]) – publisher or developer of the embedder plugin, e.g. “bodhilib”,”<github-username>”
+
+version (Optional[str]) – version of the embedder
+
+**kwargs (Dict[str, Any]) – pass through arguments for the embedder, e.g. dimension etc.
+
+Returns
+:
+an instance of Embedder service
+of type oftype, if oftype is passed, else of type Embedder
+
+Return type
+:
+E (E | Embedder)
+
+Raises
+:
+TypeError – if the type of embedder is not oftype
+
+bodhilib.get_llm(service_name: str, model: str, api_key: str | None = None, *, oftype: Type[L] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ L
+Get an instance of LLM for the given service name and model.
+
+Parameters
+:
+service_name (str) – name of the service, e.g. “openai”, “cohere”, “anthropic”
+
+model (str) – name of the model, e.g. “chat-gpt-3.5”, “command”, “claude-2”
+
+api_key (Optional[str]) – API key for the service, if the api_key is not provided, it will be looked in the environment variables
+
+oftype (Optional[Type[T]]) – if the type of LLM is known, pass the type in argument oftype, the LLM is cast to oftype and returned for better IDE support.
+
+publisher (Optional[str]) – publisher or developer of the service plugin, e.g. “bodhilib”, “<github-username>”
+
+version (Optional[str]) – version of the service
+
+**kwargs (Dict[str, Any]) – pass through arguments for the LLM service, e.g. “temperature”, “max_tokens”, etc.
+
+Returns
+:
+an instance of LLM service of type oftype, if oftype is passed, else of type LLM
+
+Return type
+:
+T (L | LLM)
+
+Raises
+:
+TypeError – if the type of LLM is not oftype
+
+bodhilib.get_prompt_source(service_name: str, *, oftype: Type[PS] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ PS
+Get an instance of PromptSource for given arguments.
+
+bodhilib.get_splitter(service_name: str, *, oftype: Type[S] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ S
+Get an instance of splitter for given arguments.
+
+Returns
+:
+an instance of Splitter service
+
+Return type
+:
+S (S | Splitter)
+
+bodhilib.get_vector_db(service_name: str, *, oftype: Type[V] | None = None, publisher: str | None = None, version: str | None = None, **kwargs: Dict[str, Any])→ V
+Get an instance of VectorDB for the given service name.
+
+Returns
+:
+an instance of VectorDB service
+
+Return type
+:
+V (V | VectorDB)
+
+bodhilib.istextlike(obj: object)→ bool
+Returns True if the object is a TextLike.
+
+bodhilib.list_embedders()→ List[Service]
+List all embedders installed and available.
+
+bodhilib.list_llms()→ List[Service]
+List all LLM services installed and available.
+
+bodhilib.list_vector_dbs()→ List[Service]
+List all VectorDB services installed and available.
+
+bodhilib.parse_prompt_template(text: str)→ List[PromptTemplate]
+Parses a bodhilib-* template format to PromptTemplate.
+
+bodhilib.prompt_output(text: str)→ Prompt
+Factory method to generate output prompts.
+
+Generates a prompt with source=”output”. Mainly by LLMs to generate output prompts.
+
+bodhilib.prompt_system(text: str)→ Prompt
+Factory method to generate system prompt from string.
+
+Parameters
+:
+text – text of the prompt
+
+Returns
+:
+Prompt object generated from the text. Defaults role=”system” and source=”input”.
+
+Return type
+:
+Prompt
+
+bodhilib.prompt_user(text: str)→ Prompt
+Factory method to generate user prompt from string.
+
+Parameters
+:
+text – text of the prompt
+
+Returns
+:
+Prompt object generated from the text. Defaults role=”user” and source=”input”.
+
+Return type
+:
+Prompt
+
+bodhilib.prompt_with_examples(template: str, **kwargs: Dict[str, Any])→ PromptTemplate
+Factory method to generate a prompt template with examples.
+
+Prompt uses jinja2 template engine to generate prompt with examples.
+
+Parameters
+:
+template – a jinja2 compliant template string to loop through examples
+
+**kwargs – additional arguments to be used for rendering the template. Can also contain role and source to override the default values.
+
+Returns
+:
+configured prompt template to generate prompt with examples
+
+Return type
+:
+PromptTemplate
+
+bodhilib.supportstext(obj: object)→ bool
+Returns True if the object supports SupportsText protocol.
+
+bodhilib.to_document(textlike: TextLike)→ Document
+Converts a TextLike to Document.
+
+bodhilib.to_document_list(inputs: SerializedInput)→ List[Document]
+Converts a SerializedInput to list of Document.
+
+bodhilib.to_node(textlike: TextLike)→ Node
+Converts a TextLike to Node.
+
+bodhilib.to_node_list(inputs: SerializedInput)→ List[Node]
+Converts a SerializedInput to list of Node.
+
+bodhilib.to_prompt(textlike: TextLike)→ Prompt
+Converts a TextLike to Prompt.
+
+bodhilib.to_prompt_list(inputs: SerializedInput)→ List[Prompt]
+Converts a SerializedInput to list of Prompt.
+
+bodhilib.to_text(textlike: TextLike)→ str
+Converts a TextLike to string.
+
+bodhilib.TemplateFormat
+List of possible values for TemplateFormat
+
+bodhilib.C
+TypeVar for bodhilib Components
+
+bodhilib.T
+TypeVar for LLM API response
+
+bodhilib.PS
+TypeVar for type bound to PromptSource
+
+bodhilib.DL
+TypeVar for type bound to DataLoader
+
+bodhilib.S
+TypeVar for type bound to Splitter
+
+bodhilib.E
+TypeVar for type bound to Embedder
+
+bodhilib.L
+TypeVar for type bound to LLM
+
+bodhilib.V
+TypeVar for type bound to VectorDB
+
+classbodhilib._models._StrEnumMixin
+Mixin class to support string enums

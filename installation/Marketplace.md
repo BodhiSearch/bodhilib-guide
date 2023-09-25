@@ -1,3 +1,3 @@
 # Plugin Marketplace
 
-lorem ipsum
+lore ipsum

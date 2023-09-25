@@ -7,6 +7,8 @@ title: bodhilib guide
 :maxdepth: 2
 
 installation/index
+getting-started/index
+deep-dive/index
 ```
 
 # bodhilib

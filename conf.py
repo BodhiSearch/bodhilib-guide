@@ -58,3 +58,4 @@ html_theme_options = {
 }
 html_logo = "placeholder-logo.svg"
 html_sidebars = {}
+nbsphinx_execute = "never"
