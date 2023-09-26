@@ -50,7 +50,7 @@ html_theme_options = {
             "type": "url",
         },
     ],
-    "use_download_button": False,
+    "use_download_button": True,
     "use_fullscreen_button": False,
     "use_issues_button": True,
     "use_edit_page_button": True,

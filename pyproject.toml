@@ -21,8 +21,13 @@ sphinx-design = "^0.5.0"
 sphinx-tabs = "^3.4.1"
 ipywidgets = "^8.1.1"
 pre-commit = "^3.4.0"
+codespell = "^2.2.5"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.codespell]
+ignore-words = 'codespell-ignore.txt'
+exclude-file = 'poetry.lock'

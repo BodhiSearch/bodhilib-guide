@@ -7,23 +7,24 @@ Prompt
 LLM
 PromptStream
 PromptTemplate
+PromptSource
 ```
 
-This guide provides a quick introduction to bodhilib, helping you get up and running with its key features. 
+This guide serves as a quick introduction to bodhilib, helping you become familiar with its key features.
 
-Its purpose isn't to explore the internal workings of bodhilib in depth but rather to offer a first-hand experience of interacting with various models and components, showcasing their capabilities in generating results.
+The primary aim of this guide is not to deep dive into the internal workings of bodhilib , but rather to offer a practical hands-on experience of interacting with various models and components, demonstrating their capabilities in generating results.
 
-This guide is compiled from Jupyter Notebook, enabling you to follow along interactively. You can download the corresponding notebook from the [BodhiSearch/bodhilib-guide](https://github.com/BodhiSearch/bodhilib-guide) repository.
+This guide has been compiled using a Jupyter Notebook, enabling you to interactively follow along. You can download the corresponding notebook from the [BodhiSearch/bodhilib-guide](https://github.com/BodhiSearch/bodhilib-guide) repository.
 
-You will need the API keys for OpenAI to execute the code. You can enter your OpenAI keys when prompted to input your key using the getpass library.
+To execute the code, you will need API keys for OpenAI. Either have it set as an environment variable `OPENAI_API_KEY`, or you will be prompted to input your keys using the getpass library when necessary.
 
-In this introductory guide, we'll cover the following:
+In this introductory guide, we'll cover the following topics:
 
 1. [Prompt](Prompt)
 1. [LLM](LLM)
 1. [PromptStream](PromptStream)
 1. [PromptTemplate](PromptTemplate)
-1. PromptSource
+1. [PromptSource](PromptSource)
 1. DataLoader
 1. Splitter
 1. Embedder

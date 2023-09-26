@@ -1,3 +1,9 @@
 # Deep Dive
 
-lorem ipsum
+```{toctree}
+:hidden:
+
+Prompt
+```
+
+Welcome to deep-dive section.
