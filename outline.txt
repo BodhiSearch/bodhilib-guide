@@ -1,0 +1,69 @@
+
+/notebooks/contributing
+    - 
+
+Here is a possible outline for a guide:
+
+1. bodhilib
+   - Why Bodhilib?
+    1. Open Source
+    1. Plugin Architecture
+    1. Pythonic and Composable Design
+   - Contributing
+   - Contact
+
+2. Installation
+   - How to install
+   - Required Dependencies
+   
+3. Getting Started
+   - Basic Concepts and Terminology
+   - Example of a simple usage of bodhilib
+
+4. Detailed Guides
+   1. Using Languages Models (LLM)
+      - How to interact with LLM API
+      - Generating responses for a prompt
+   2. Creating and Using Prompt Sources
+      - Browse and search through prompt templates
+   3. Data Loading with bodhilib
+      - Load data from various sources
+      - Convert data into Document objects
+   4. Splitting Documents into Nodes
+      - Concept of Node in bodhilib
+      - Splitting text in bodhilib
+   5. Embedding into Nodes
+      - How to use Embedder to create Node embeddings
+   6. Using VectorDB for Node Information Retrieval
+      - Storing, retrieving, and searching through Node embeddings
+
+5. Advanced Topics (Continued)
+   - Implementing a Custom DataLoader
+   - Implementing a Custom Embedder
+   - Implementing a Custom Splitter
+   - Utilizing TemplateFormats
+
+6. Best Practices
+   - Tips and tricks for using bodhilib effectively
+   - Common pitfalls and how to avoid them 
+
+7. API Reference
+   - Detailed Documentation for each class and method in the library.
+   - Examples of how to use each API.
+
+8. Integration with Other Tools
+   - How to use bodhilib with popular Python libraries/frameworks like Flask, Django, and Pytest.
+   - How to integrate bodhilib within a data pipeline.
+
+9. Troubleshooting and FAQ
+   - Common issues users might face and their solutions.
+   - Frequently asked questions about bodhilib, with answers.
+
+10. Contributing to bodhilib
+    - How to contribute to the project
+    - Guidelines for submitting issues and pull requests
+
+11. Conclusion and Further Resources
+    - Summary of what was covered in the guide
+    - Where to go for more resources, help, and information.
+

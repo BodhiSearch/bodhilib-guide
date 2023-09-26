@@ -1,0 +1,91 @@
+bodhilib is a python library, that allows you to use various LLM APIs using a consistent interface. 
+The main advantages of the API are -
+- Open source
+- Plugin Architecture
+- Simple composable design
+- Pythonic interfaces
+- Re-use and not re-inventing the wheel
+- No walled gardens, plus offering, or preferred partner implementation in the core
+
+
+Few of the benefits of Plugin Architectures are -
+- Core repo only contains core interface, very light weight and slim
+- Easy to understand decluttered core interface
+- All funcitonalities through plugins
+- Even the features provided by bodhilib packaged as `bodhiext.*` package
+- Easy extensibility through plugins
+- Extensibility for your particular use case
+- Community and distributed development possible through plugin architecture
+- No single-repo PR hell
+- No single-repo bug fix dependency
+- No preferred partner only implementation
+- Product companies can own and release their own plugins
+- Plugin marketplace to search for implementations
+- Plugin extensibility allows for Rust based implementation for performance critical interface
+- No re-inventing the wheel, re-use existing implementations, e.g. monitoring through existing stack
+- Using python namespace packages for `bodhiext.*` plugins for easy recall of implementations
+
+
+Few of the benefits of Composable design -
+- Design inspired by Haskell, and other functional languages
+- Composable design
+- Parametric polymorphism, methods can take multiple type of arguments, handles implementation internally
+
+Few of the benefits of Pythonic interfaces -
+- Pythonic interfaces, not Java OO hell design
+
+The main models of the libraries are -
+- Role
+  Can be system, ai, or user. indicates the role of the prompt.
+- Source
+  Can be input, output. indicates if the prompt is input, or generated as output from LLM.
+- Prompt
+  The main model used to send messages to LLM, and receive generated response. text = the prompt text to send, role = the role of the prompt, source = input or output indicating the direction of message
+- PromptStream
+  The prompt as a streaming async response rather than sync response. So you receive the response as a stream of messages, rather than a single response. Iterate over the stream to get the messages as they are generated. Pythonic interface of a Generator/Iterator pattern.
+- TemplateFormat - indicates the format of template, can be fstring, jinja2, bodhilib-fstring, bodhilib-jinja2.
+    fstring - injects the variable using python f-string
+    jinja2 - uses jinja2 template to inject the variables, used for more complex prompt involving looping and if-else conditions.
+    bodhilib-fstring - parses the serialized prompt template and then uses f-string to inject variables. 
+    bodhilib-jinja2 - parses the serialized prompt template and then uses jinja2 template to inject variables.
+- PromptTemplate
+  reads/writes parameterized prompt templates to file. Allows reuse, sharing of parameterized prompts templates.
+- Document
+  Represents a resource to process. Contains text as the main content, and metadata as key/value argument.
+- Node
+  Represents a processible chunk split from Document. Contains text as the main content, and metadata as key/value argument. Also contains reference to the parent Document as parent. Contains id and Embedding to be stored in Vector DB.
+- Emebdding
+  To represent vector representation of a text/Node chunk.
+- SupportsText
+  Protocol to indicate if a class has property text. Majority of the models implement this protocol, like Prompt, Document, Node, etc.
+- PathLike
+  Flexible input to take a local file location, as str or as python Path
+- TextLike
+  Flexible type to represent input as str or as SupportsText
+- SerializedInput
+  Flexible type to represent input as str or as SupportsText or as serialized object as dict
+
+The main components of the library are -
+- PromptSource
+  The interface to browse and search through prompt templates.
+- DataLoader
+  The interface to load the data from various sources as Document, e.g. file, database, etc.
+- Splitter
+  The interface to split the Document into processible entities as Node.
+- Embedder
+  The interface to embed the Node chunk into embedding.
+- VectorDB
+  The interface to store, retrieve and search the vector representation of the Node chunk.
+- LLM
+  To interact with LLM API, and generate response for a prompt.
+
+
+
+
+===
+
+
+# bodhilib uses Pydantic to define its models. Let's explore what all attributes are inside Prompt model.
+
+for field_name, field in Prompt.__fields__.items():
+    print(f"{field_name}: {field.type_.__doc__}\n")
