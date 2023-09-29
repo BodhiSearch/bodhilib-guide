@@ -8,6 +8,9 @@ LLM
 PromptStream
 PromptTemplate
 PromptSource
+DataLoader
+Splitter
+Embedder
 ```
 
 This guide serves as a quick introduction to bodhilib, helping you become familiar with its key features.
@@ -25,8 +28,8 @@ In this introductory guide, we'll cover the following topics:
 1. [PromptStream](PromptStream)
 1. [PromptTemplate](PromptTemplate)
 1. [PromptSource](PromptSource)
-1. DataLoader
-1. Splitter
-1. Embedder
+1. [DataLoader](DataLoader)
+1. [Splitter](Splitter)
+1. [Embedder](Embedder)
 1. VectorDB
 1. BodhiEngine
