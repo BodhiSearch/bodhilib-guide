@@ -377,27 +377,25 @@ css = ["tinycss2 (>=1.1.0,<1.2)"]
 
 [[package]]
 name = "bodhilib"
-version = "0.1.7"
+version = "0.1.6"
 description = "intuitive and powerful library to work with LLMs"
 optional = false
-python-versions = "^3.8.1,<3.12"
-files = []
-develop = false
+python-versions = ">=3.8.1,<3.12"
+files = [
+    {file = "bodhilib-0.1.6-py3-none-any.whl", hash = "sha256:3c6588266e5b251aa1fb9d655b987e339463e5651f9402482d4358c9a301a856"},
+    {file = "bodhilib-0.1.6.tar.gz", hash = "sha256:300849e62370f6239bc880c82dc32871846a12c66d38b6d212ddd7ca1a61da67"},
+]
 
 [package.dependencies]
-cohere = "^4.21"
-jinja2 = "^3.1.2"
-openai = "^0.27.8"
-pluggy = "^1.2.0"
-pydantic = "^1"
-python-dotenv = "^1.0.0"
-qdrant-client = "^1.5.0"
-sentence-transformers = "^2.2.2"
-torch = ">=2.0.0, !=2.0.1"
-
-[package.source]
-type = "directory"
-url = "../bodhilib"
+cohere = ">=4.21,<5.0"
+jinja2 = ">=3.1.2,<4.0.0"
+openai = ">=0.27.8,<0.28.0"
+pluggy = ">=1.2.0,<2.0.0"
+pydantic = ">=1,<2"
+python-dotenv = ">=1.0.0,<2.0.0"
+qdrant-client = ">=1.5.0,<2.0.0"
+sentence-transformers = ">=2.2.2,<3.0.0"
+torch = ">=2.0.0,<2.0.1 || >2.0.1"
 
 [[package]]
 name = "certifi"
@@ -1281,13 +1279,13 @@ test = ["flaky", "ipyparallel", "pre-commit", "pytest (>=7.0)", "pytest-asyncio"
 
 [[package]]
 name = "ipython"
-version = "8.15.0"
+version = "8.16.0"
 description = "IPython: Productive Interactive Computing"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "ipython-8.15.0-py3-none-any.whl", hash = "sha256:45a2c3a529296870a97b7de34eda4a31bee16bc7bf954e07d39abe49caf8f887"},
-    {file = "ipython-8.15.0.tar.gz", hash = "sha256:2baeb5be6949eeebf532150f81746f8333e2ccce02de1c7eedde3f23ed5e9f1e"},
+    {file = "ipython-8.16.0-py3-none-any.whl", hash = "sha256:dba644376826a532e362da945a672865be7efda76ecf999219e6021bda85d702"},
+    {file = "ipython-8.16.0.tar.gz", hash = "sha256:7a1b2e1e6a3ec5baa466163c451335081f31859883889ff0289c6b21f7a095e2"},
 ]
 
 [package.dependencies]
@@ -4534,4 +4532,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11, <3.12"
-content-hash = "f62266d95b1736fe985acb30abba6b16817a03fcbcd24bb6d6d849669d92e278"
+content-hash = "234af7a64952257363cba713e579695ada6f9bdb3bcb02e548bf5b1c1ad7070c"
