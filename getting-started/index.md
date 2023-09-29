@@ -11,6 +11,9 @@ PromptSource
 DataLoader
 Splitter
 Embedder
+VectorDB
+ExtractiveQnA
+BodhiEngine
 ```
 
 This guide serves as a quick introduction to bodhilib, helping you become familiar with its key features.
@@ -31,5 +34,6 @@ In this introductory guide, we'll cover the following topics:
 1. [DataLoader](DataLoader)
 1. [Splitter](Splitter)
 1. [Embedder](Embedder)
-1. VectorDB
-1. BodhiEngine
+1. [VectorDB](VectorDB)
+1. [Extractive QnA](ExtractiveQnA)
+1. [BodhiEngine](BodhiEngine)
