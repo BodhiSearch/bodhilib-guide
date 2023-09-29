@@ -3,7 +3,6 @@
 ```{toctree}
 :hidden:
 
-Prompt
 ```
 
-Welcome to deep-dive section.
+Welcome to deep-dive section. This is a WIP.
