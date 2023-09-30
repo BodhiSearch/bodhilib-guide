@@ -15,6 +15,7 @@ VectorDB
 ExtractiveQnA
 BodhiEngine
 FastAPIRoutes
+BodhiProxy
 ```
 
 This guide serves as a quick introduction to bodhilib, helping you become familiar with its key features.
@@ -39,3 +40,4 @@ In this introductory guide, we'll cover the following topics:
 1. [Extractive QnA](ExtractiveQnA)
 1. [BodhiEngine](BodhiEngine)
 1. [FastAPIRoutes](FastAPIRoutes)
+1. [BodhiProxy](BodhiProxy)
