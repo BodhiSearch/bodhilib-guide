@@ -14,11 +14,14 @@ help:
 
 .PHONY: help Makefile
 
+clean:
+	rm -rf _build/html
+
+autodoc: clean
+	poetry run sphinx-autobuild . _build/html
+
 run_docs:
 	poetry run python -m http.server -d _build/html 8000
-
-autodoc:
-	poetry run sphinx-autobuild . _build/html
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
