@@ -1,3 +1,3 @@
 # Benefits of Plugin Architecture
 
-lorem ipsum
+This is WIP.

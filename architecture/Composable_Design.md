@@ -1,3 +1,3 @@
 # Composobale Design
 
-lorem ipsum
+This is WIP.

@@ -1,3 +1,3 @@
 # Contributing
 
-this is contributing guide
+This is WIP.
