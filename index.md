@@ -9,6 +9,7 @@ title: bodhilib guide
 installation/index
 getting-started/index
 deep-dive/index
+contributing/index
 ```
 
 # bodhilib
