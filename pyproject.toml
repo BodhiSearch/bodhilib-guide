@@ -27,6 +27,7 @@ bodhiext-openai = "^0.1.2"
 bodhiext-sentence-transformers = "^0.1.2"
 bodhiext-qdrant = "^0.1.2"
 fn-py = "^0.6.0"
+python-dotenv = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
