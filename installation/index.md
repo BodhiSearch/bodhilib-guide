@@ -4,12 +4,6 @@ title: Installation
 
 # Installation
 
-```{toctree}
-:hidden:
-
-Marketplace
-```
-
 [bodhilib](https://pypi.org/project/bodhilib/) and [bodhiext.*](https://pypi.org/project/bodhiext.all/) are available on PyPI as Python packages. Below are the step-by-step instructions for installing bodhilib and bodhiext plugin packages to get you started.
 
 ## Requirements

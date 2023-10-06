@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import toml
 
 PROJ_DIR = Path(__file__).parent.absolute()
@@ -35,8 +36,6 @@ html_theme_options = {
     "use_repository_button": True,
     "home_page_in_toc": True,
     "footer_start": ["footer.html"],
-    # "toc_title": "Contents",  # no change found in page, unclear about the config
-    # "show_toc_level": 0,  # no nested pages yet
     "icon_links": [
         {
             "name": "GitHub",
@@ -54,8 +53,6 @@ html_theme_options = {
     "use_fullscreen_button": False,
     "use_issues_button": True,
     "use_edit_page_button": True,
-    "collapse_navigation": True,
 }
 html_logo = "placeholder-logo.svg"
-html_sidebars = {}
 nbsphinx_execute = "always"

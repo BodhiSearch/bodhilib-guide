@@ -829,6 +829,17 @@ testing = ["covdefaults (>=2.3)", "coverage (>=7.3)", "diff-cover (>=7.7)", "pyt
 typing = ["typing-extensions (>=4.7.1)"]
 
 [[package]]
+name = "fn-py"
+version = "0.6.0"
+description = "Implementation of missing features to enjoy functional programming in Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fn.py-0.6.0-py3-none-any.whl", hash = "sha256:31a6c596d60e3c236aec8097270259c53c3635de4327927a2fd1928a56116658"},
+    {file = "fn.py-0.6.0.tar.gz", hash = "sha256:97b7e2d625cbcb9b322d4dbc57386f9e454da23617347abe1854fed434e0cb10"},
+]
+
+[[package]]
 name = "fqdn"
 version = "1.5.1"
 description = "Validates fully-qualified domain names against RFC 1123, so that they are acceptable to modern bowsers"
@@ -4601,4 +4612,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11, <3.12"
-content-hash = "8c828aeb9f19c867f82dba9d2f6ee0cfbdb5ed6d1167a3fe00702117df29df71"
+content-hash = "827c8eaec90e2a46b880a8a5c6a9102aee6b7bb5ac5db937789115ab77792392"
