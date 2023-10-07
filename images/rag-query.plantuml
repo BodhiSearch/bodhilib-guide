@@ -1,0 +1,16 @@
+@startuml rag-query
+
+!theme materia
+
+skinparam BackgroundColor white
+skinparam Shadowing false
+
+:User: -right-> (Input Query)
+(Input Query) -right-> (Embedding): Embedder
+(Embedding) -right-> (Records): VectorDB.query
+(Input Query) -down-> (PromptTemplate)
+(Records) -down-> (PromptTemplate)
+(PromptTemplate) -down-> (Prompt)
+(Prompt) -down-> (Response): LLM
+
+@enduml

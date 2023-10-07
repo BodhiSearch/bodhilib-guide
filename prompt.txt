@@ -79,13 +79,173 @@ The main components of the library are -
 - LLM
   To interact with LLM API, and generate response for a prompt.
 
-
-
-
 ===
+Following is the Retrieval Augmented Generation (RAG) workflow using bodhilib components.
 
+::: {.cell .markdown}
+# Extractive QnA
 
-# bodhilib uses Pydantic to define its models. Let's explore what all attributes are inside Prompt model.
+So far, we have seen how to load our documents, split them into Nodes,
+create Embeddings for the Nodes, insert them into Vector database, and
+then finally query them for a given input query.
 
-for field_name, field in Prompt.__fields__.items():
-    print(f"{field_name}: {field.type_.__doc__}\n")
+In this Getting Started guide, we are going to see how to use LLM to do
+an extractive QnA on the returned nodes, and display result directly. We
+are going to use service and components that we have already covered in
+the guide to build this workflow.
+
+Let\'s get started.
+:::
+
+::: {.cell .markdown}
+## Setup
+
+1.  Ensure bodhilib is installed.
+2.  Ensure LLM extension `bodhiext.openai` is installed.
+3.  Ensure Embedder extension `bodhiext.sentence_transformers` is
+    installed.
+4.  Ensure VectorDB extension `bodhiext.qdrant` is installed.
+:::
+
+::: {.cell .code execution_count="1"}
+``` python
+!pip install -q bodhilib bodhiext.openai bodhiext.sentence_transformers bodhiext.qdrant python-dotenv
+```
+:::
+
+::: {.cell .code execution_count="2"}
+``` python
+# prepare the node embeddings for the Paul Graham's essay:
+# 1. Load the Paul Graham essays from data/data-loader directory using `file` DataLoader
+# 2. Convert it into Nodes using sentence_splitter
+# 3. Enrich node embeddings using the sentence_transformers
+import os
+from pathlib import Path
+from bodhilib import (
+    get_data_loader,
+    get_splitter,
+    get_embedder,
+    get_vector_db,
+    get_llm,
+    Distance,
+)
+
+data_loader = get_data_loader("file")
+splitter = get_splitter("text_splitter", max_len=300, overlap=30)
+embedder = get_embedder("sentence_transformers")
+vector_db = get_vector_db("qdrant", location=":memory:")
+llm = get_llm('openai_chat', model='gpt-3.5-turbo')
+
+# Get data directory path and add it to data_loader
+current_dir = current_working_directory = Path(os.getcwd())
+data_dir = current_dir / ".." / "data" / "data-loader"
+data_loader.add_resource(dir=str(data_dir))
+docs = data_loader.load()
+
+# 
+nodes = splitter.split(docs)
+
+# 
+_ = embedder.embed(nodes)
+
+# 
+collection_name = "test_collection"
+if "test_collection" in vector_db.get_collections():
+    vector_db.delete_collection("test_collection")
+vector_db.create_collection(
+    collection_name=collection_name,
+    dimension=embedder.dimension,
+    distance=Distance.COSINE,
+)
+_ = vector_db.upsert(collection_name, nodes)
+
+# 
+input_query = "According to Paul Graham, how to tackle when you are in doubt?"
+embedding = embedder.embed(input_query)
+result = vector_db.query(collection_name, embedding[0].embedding, limit=5)
+```
+:::
+
+::: {.cell .code execution_count="3"}
+``` python
+# Create the prompt template for extracting answer from given text chunks
+from bodhilib import PromptTemplate
+
+template = """Below are the text chunks from a blog/article. 
+1. Read and understand the text chunks
+2. After the text chunks, there are list of questions starting with `Question:`
+3. Answer the questions from the information given in the text chunks
+4. If you don't find the answer in the provided text chunks, say 'I couldn't find the answer to this question in the given text'
+
+{% for text in texts %}
+### START
+{{ text }}
+### END
+{% endfor %}
+
+Question: {{ query }}
+Answer: 
+"""
+prompt_template = PromptTemplate(template=template, format='jinja2')
+```
+:::
+
+::: {.cell .code execution_count="4"}
+``` python
+texts = [r.text for r in result]
+prompt = prompt_template.to_prompts(texts=texts, query=input_query)
+```
+:::
+
+::: {.cell .code execution_count="6"}
+``` python
+# OpenAI API setup
+import os
+from getpass import getpass
+from dotenv import load_dotenv
+
+load_dotenv()
+if "OPENAI_API_KEY" not in os.environ:
+    os.environ["OPENAI_API_KEY"] = getpass("Enter your OpenAI API key: ")
+```
+:::
+
+::: {.cell .code execution_count="7"}
+``` python
+# get the OpenAI LLM service instance
+from bodhilib import get_llm
+
+llm = get_llm('openai_chat', model='gpt-3.5-turbo')
+```
+:::
+
+::: {.cell .code execution_count="8"}
+``` python
+response = llm.generate(prompt)
+```
+:::
+
+::: {.cell .code execution_count="9"}
+``` python
+import textwrap
+
+print(textwrap.fill(response.text, 100))
+```
+
+::: {.output .stream .stdout}
+    According to Paul Graham, when you are in doubt, you should optimize for interestingness and give
+    different types of work a chance to show you what they're like.
+:::
+:::
+
+::: {.cell .markdown}
+
+------------------------------------------------------------------------
+
+🎉 We just created a flow for Extractive QnA using different bodhilib
+components.
+
+The Extractive QnA flow is so frequently used, that bodhiext provides an
+implementation for this flow in form of BodhiEngine. Let\'s check out
+[BodhiEngine](BodhiEngine.ipynb) next.
+:::

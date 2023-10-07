@@ -30,7 +30,7 @@ poetry add bodhilib
 
 ## Installing bodhiext.all
 
-The `bodhiext.*` packages are a family of plugin packages developed by the bodhilib team. They provide independent implementations for the most frequently used and most popular components when building Generative AI/LLM-based apps. You can browse and search for the available plugin packages in the [Marketplace](Marketplace).
+The `bodhiext.*` packages are a family of plugin packages developed by the bodhilib team. They provide independent implementations for the most frequently used and most popular components when building Generative AI/LLM-based apps. We are working on building a Marketplace for plugins, where you can browse and discover the plugins for your use-case.
 
 If you are exploring and prefer not to be bothered by installing packages as you need them, you can install all the packages offered by `bodhiext.*` by installing the `bodhiext.all` package. To do this, run the following command in your terminal:
 

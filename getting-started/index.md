@@ -13,6 +13,7 @@ Splitter
 Embedder
 VectorDB
 ExtractiveQnA
+RetrievalAugmentedGeneration
 BodhiEngine
 FastAPIRoutes
 BodhiProxy
@@ -38,6 +39,7 @@ In this introductory guide, we'll cover the following topics:
 1. [Embedder](Embedder)
 1. [VectorDB](VectorDB)
 1. [Extractive QnA](ExtractiveQnA)
+1. [RetrievalAugmentedGeneration](RetrievalAugmentedGeneration)
 1. [BodhiEngine](BodhiEngine)
 1. [FastAPIRoutes](FastAPIRoutes)
 1. [BodhiProxy](BodhiProxy)

@@ -1,0 +1,13 @@
+@startuml rag-ingestion
+
+!theme materia
+
+skinparam BackgroundColor white
+skinparam Shadowing false
+
+(Data) -right-> (Document): DataLoader
+(Document) -right-> (Node): Splitter
+(Node) -right-> (Embedding): Embedder
+(Embedding) -right-> (Record): VectorDB.insert
+
+@enduml
