@@ -55,4 +55,4 @@ html_theme_options = {
     "use_edit_page_button": True,
 }
 html_logo = "placeholder-logo.svg"
-nbsphinx_execute = "always"
+nbsphinx_execute = "auto"

@@ -4,7 +4,7 @@ Here is a rough roadmap on supporting additional components as part of bodhilib 
 
 ## Features
 
-- [x] Extractive QnA
+- [x] RAG
 - [ ] Async
 - [ ] FastAPI routes
 - [ ] Proxy
